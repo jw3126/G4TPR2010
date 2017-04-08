@@ -7,9 +7,21 @@
 class DetectorConstruction: public G4VUserDetectorConstruction {
 
 public:
-    DetectorConstruction(): G4VUserDetectorConstruction() {};
-    ~DetectorConstruction(){};
+    DetectorConstruction(): G4VUserDetectorConstruction(),
+    fLogicalVoxel10(nullptr),
+    fLogicalVoxel20(nullptr)
+    {};
+
+    ~DetectorConstruction(){
+//        delete fLogicalVoxel10;
+//        delete fLogicalVoxel20;
+    };
+
     virtual G4VPhysicalVolume* Construct();
+private:
+    G4LogicalVolume* fLogicalVoxel10;
+    G4LogicalVolume* fLogicalVoxel20;
+
 };
 
 
