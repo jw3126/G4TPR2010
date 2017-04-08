@@ -17,6 +17,8 @@ public:
 //        delete fLogicalVoxel20;
     };
 
+    virtual void ConstructSDandField();
+
     virtual G4VPhysicalVolume* Construct();
 private:
     G4LogicalVolume* fLogicalVoxel10;

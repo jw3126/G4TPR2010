@@ -3,14 +3,16 @@
 ActionInitialization::ActionInitialization() : G4VUserActionInitialization(){}
 ActionInitialization::~ActionInitialization() {}
 
+void ActionInitialization::BuildForMaster() const {
+    RunAction* runAction = new RunAction;
+    SetUserAction(runAction);
+}
+
 void ActionInitialization::Build() const
 {
 
     PrimaryGeneratorAction* primaryGeneratorAction = new PrimaryGeneratorAction();
     SetUserAction(primaryGeneratorAction);
-
-    EventAction* eventAction = new EventAction();
-    SetUserAction(eventAction);
 
     SteppingAction* steppingAction = new SteppingAction();
     SetUserAction(steppingAction);
@@ -18,4 +20,6 @@ void ActionInitialization::Build() const
     RunAction* runAction = new RunAction();
     SetUserAction(runAction);
 
+    EventAction* eventAction = new EventAction(runAction);
+    SetUserAction(eventAction);
 }

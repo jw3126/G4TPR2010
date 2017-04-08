@@ -8,10 +8,12 @@
 class EventAction : public G4UserEventAction{
 
 public:
-    EventAction();
+    EventAction(RunAction *fRunAction);
     ~EventAction();
     virtual void BeginOfEventAction(const G4Event* );
     virtual void EndOfEventAction(const G4Event* );
+private:
+    RunAction* fRunAction;
 };
 
 
