@@ -3,7 +3,7 @@ project(G4TPR2010)
 set(CMAKE_CXX_STANDARD 14)
 
 
-find_package(Geant4 REQUIRED ui_all vis_all)
+find_package(Geant4 REQUIRED gdml ui_all vis_all)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 include(${Geant4_USE_FILE})
