@@ -39,9 +39,7 @@ G4double ReadScorer(const G4Event* evt, const G4String scorerName, const G4int c
 
 void EventAction::EndOfEventAction(const G4Event* evt) {
 
-    G4double dose10 = ReadScorer(evt, "voxel10/dose");
-    G4double dose20 = ReadScorer(evt, "voxel20/dose");
-    fRunAction->UpdateDose10(dose10);
-    fRunAction->UpdateDose20(dose20);
+    G4double dose = ReadScorer(evt, "detector/dose");
+    fRunAction->UpdateDose10(dose);
 
 }

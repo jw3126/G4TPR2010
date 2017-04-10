@@ -4,6 +4,7 @@
 #include <G4VisExecutive.hh>
 #include <G4UImanager.hh>
 #include <G4UIExecutive.hh>
+#include <G4GDMLParser.hh>
 
 #include "ActionInitialization.h"
 #include "DetectorConstruction.h"
@@ -38,7 +39,12 @@ int main(int argc, char** argv) {
 #endif
 
 
-    DetectorConstruction* detectorConstruction = new DetectorConstruction();
+    G4GDMLParser parser;
+    G4bool validate = false;
+    parser.Read("geometry.gdml", validate);
+    G4VPhysicalVolume* physicalWorld = parser.GetWorldVolume();
+
+    DetectorConstruction* detectorConstruction = new DetectorConstruction(physicalWorld);
     runManager->SetUserInitialization(detectorConstruction);
 
     G4VModularPhysicsList* physicsList = new QBBC;

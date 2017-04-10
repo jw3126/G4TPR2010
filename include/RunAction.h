@@ -15,10 +15,8 @@ public:
     virtual void EndOfRunAction(const G4Run*);
 
     void UpdateDose10(G4double dose);
-    void UpdateDose20(G4double dose);
 private:
-    G4Accumulable<G4double> fDose10;
-    G4Accumulable<G4double> fDose20;
+    G4Accumulable<G4double> fDose;
 
 
 };

@@ -7,13 +7,15 @@
 class DetectorConstruction: public G4VUserDetectorConstruction {
 
 public:
-    DetectorConstruction(): G4VUserDetectorConstruction(),
-    fLogicalVoxel10(nullptr),
-    fLogicalVoxel20(nullptr)
-    {};
+    DetectorConstruction(G4VPhysicalVolume* physicalWorld): G4VUserDetectorConstruction(),
+    fScoringVoxel(nullptr),
+    fPhysicalWorld(physicalWorld) {
+        fScoringVoxel = physicalWorld->GetLogicalVolume();
+        physicalWorld->GetLogicalVolume();
+    };
 
     ~DetectorConstruction(){
-//        delete fLogicalVoxel10;
+//        delete fScoringVoxel;
 //        delete fLogicalVoxel20;
     };
 
@@ -21,8 +23,8 @@ public:
 
     virtual G4VPhysicalVolume* Construct();
 private:
-    G4LogicalVolume* fLogicalVoxel10;
-    G4LogicalVolume* fLogicalVoxel20;
+    G4LogicalVolume* fScoringVoxel;
+    G4VPhysicalVolume* fPhysicalWorld;
 
 };
 

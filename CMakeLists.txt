@@ -17,6 +17,10 @@ configure_file(${PROJECT_SOURCE_DIR}/init.mac
         COPYONLY
         )
 
+configure_file(${PROJECT_SOURCE_DIR}/geometry.gdml
+        ${PROJECT_BINARY_DIR}/geometry.gdml
+        COPYONLY
+        )
 
 add_executable(G4TPR2010 main.cpp ${sources} ${headers})
 target_link_libraries(G4TPR2010 ${Geant4_LIBRARIES})
