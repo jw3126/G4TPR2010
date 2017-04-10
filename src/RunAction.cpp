@@ -10,7 +10,7 @@ RunAction::RunAction() : fDose("Dose10", 0)
 
 RunAction::~RunAction(){}
 
-void RunAction::UpdateDose10(G4double dose){
+void RunAction::UpdateDose(G4double dose){
     fDose += dose;
 }
 

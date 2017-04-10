@@ -3,29 +3,25 @@
 
 
 #include <G4VUserDetectorConstruction.hh>
+#include <G4GDMLParser.hh>
 
 class DetectorConstruction: public G4VUserDetectorConstruction {
 
 public:
-    DetectorConstruction(G4VPhysicalVolume* physicalWorld): G4VUserDetectorConstruction(),
-    fScoringVoxel(nullptr),
-    fPhysicalWorld(physicalWorld) {
-        fScoringVoxel = physicalWorld->GetLogicalVolume();
-        physicalWorld->GetLogicalVolume();
+    DetectorConstruction(const G4GDMLParser& parser):G4VUserDetectorConstruction(),
+    fParser(parser)
+    {
     };
 
     ~DetectorConstruction(){
-//        delete fScoringVoxel;
-//        delete fLogicalVoxel20;
+        // what do I need to delete?
     };
 
     virtual void ConstructSDandField();
 
     virtual G4VPhysicalVolume* Construct();
 private:
-    G4LogicalVolume* fScoringVoxel;
-    G4VPhysicalVolume* fPhysicalWorld;
-
+    const G4GDMLParser& fParser; // why not G4GDMLParser* ?
 };
 
 

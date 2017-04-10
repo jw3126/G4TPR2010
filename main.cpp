@@ -42,9 +42,8 @@ int main(int argc, char** argv) {
     G4GDMLParser parser;
     G4bool validate = false;
     parser.Read("geometry.gdml", validate);
-    G4VPhysicalVolume* physicalWorld = parser.GetWorldVolume();
 
-    DetectorConstruction* detectorConstruction = new DetectorConstruction(physicalWorld);
+    DetectorConstruction* detectorConstruction = new DetectorConstruction(parser);
     runManager->SetUserInitialization(detectorConstruction);
 
     G4VModularPhysicsList* physicsList = new QBBC;

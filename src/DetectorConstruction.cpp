@@ -2,17 +2,16 @@
 #include <G4SDManager.hh>
 #include <G4MultiFunctionalDetector.hh>
 #include <G4PSDoseDeposit.hh>
-#include "G4Box.hh"
-#include "G4Material.hh"
-#include "G4NistManager.hh"
 #include "DetectorConstruction.h"
-#include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
+
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
 
 G4VPhysicalVolume* DetectorConstruction::Construct() {
-    return fPhysicalWorld;
+
+    G4VPhysicalVolume* physicalWorld = fParser.GetWorldVolume();
+
+    return physicalWorld;
 
 //    // world
 //    G4NistManager* nist = G4NistManager::Instance();
@@ -120,7 +119,7 @@ void DetectorConstruction::ConstructSDandField() {
     G4MultiFunctionalDetector *detector = new G4MultiFunctionalDetector("detector");
     G4VPrimitiveScorer* psDose = new G4PSDoseDeposit("dose");
     detector->RegisterPrimitive(psDose);
-    SetSensitiveDetector(fScoringVoxel, detector);
+    SetSensitiveDetector("ScoringVoxel", detector);
     sdManager->AddNewDetector(detector);
 
 
