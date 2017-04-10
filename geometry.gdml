@@ -5,10 +5,13 @@
     <define>
         <rotation name="identity" x="0" y="0" z="0"/>
         <position name="origin" x="0" y="0" z="0" unit="cm"/>
-        <quantity name="xVoxel" type="length" unit="mm" value="1000"/>
-        <quantity name="yVoxel" type="length" unit="m" value="1"/>
-        <quantity name="zVoxel" type="length" unit="km" value="0.001"/>
+        <quantity name="lxVoxel" type="length" unit="mm" value="10"/>
+        <quantity name="lyVoxel" type="length" unit="mm" value="10"/>
+        <quantity name="lzVoxel" type="length" unit="mm" value="10"/>
 
+        <quantity name="lxTank" type="length" unit="cm" value="20"/>
+        <quantity name="lyTank" type="length" unit="cm" value="20"/>
+        <quantity name="lzTank" type="length" unit="cm" value="50"/>
     </define>
 
     <materials>
@@ -35,7 +38,8 @@
 
     <solids>
         <box name="WorldBox" x="100" y="200" z="300" unit="cm"/>
-        <box name="ScoringBox" x="xVoxel" y="yVoxel" z="zVoxel"/>
+        <box name="ScoringBox" x="lxVoxel" y="lyVoxel" z="lzVoxel"/>
+        <box name="TankBox" x="lxTank" y="lyTank" z="lzTank"/>
     </solids>
 
     <structure>
@@ -43,11 +47,21 @@
             <materialref ref="Water"/>
             <solidref ref="ScoringBox"/>
         </volume>
+        <volume name="Tank">
+            <materialref ref="Water"/>
+            <solidref ref="TankBox"/>
+            <physvol>
+                <volumeref ref="ScoringVoxel"/>
+                <positionref ref="origin"/>
+                <rotationref ref="identity"/>
+            </physvol>
+        </volume>
+
         <volume name="World">
             <materialref ref="Air"/>
             <solidref ref="WorldBox"/>
             <physvol>
-                <volumeref ref="ScoringVoxel"/>
+                <volumeref ref="Tank"/>
                 <positionref ref="origin"/>
                 <rotationref ref="identity"/>
             </physvol>
