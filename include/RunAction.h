@@ -5,6 +5,7 @@
 #include <G4UserRunAction.hh>
 #include <G4ios.hh>
 #include <G4Accumulable.hh>
+#include "PrimaryGeneratorAction.h"
 
 class RunAction : public G4UserRunAction{
 
@@ -17,8 +18,7 @@ public:
     void UpdateDose(G4double dose);
 private:
     G4Accumulable<G4double> fDose;
-
-
+    void EndOfRunActionMasterFinal(const G4Run* );
 };
 
 

@@ -9,6 +9,7 @@
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 
+// A Rectangle for defining field shapes
 struct Rectangle {
     G4double x_min;
     G4double x_max;
@@ -51,6 +52,8 @@ public:
 
 private:
     G4ParticleGun* fParticleGun;
+
+private:
     Rectangle fFieldShape;
     G4ThreeVector GenerateMomentum();
 
