@@ -4,6 +4,7 @@
 #include <G4VisExecutive.hh>
 #include <G4UImanager.hh>
 #include <G4UIExecutive.hh>
+#include <RunConext.h>
 
 #include "ActionInitialization.h"
 #include "DetectorConstruction.h"
@@ -63,10 +64,15 @@ int main(int argc, char** argv) {
 
     G4MTRunManager* runManager = GetRunManager();
 
+
+    Analysis analysis;
+    analysis = Analysis();
     RunParameters runParameters = RunParameters();
     runParameters.geometryPath = "geometry.gdml";
     runParameters.primaryEnergy = 6*MeV;
     runParameters.nEvent = 100000;
+
+    RunContext runContext = RunContext(analysis, runParameters);
 
 
     DetectorConstruction* detectorConstruction = new DetectorConstruction(runParameters);
@@ -76,17 +82,12 @@ int main(int argc, char** argv) {
     physicsList->SetVerboseLevel(0);
     runManager->SetUserInitialization(physicsList);
 
-    ActionInitialization* actionInitialization = new ActionInitialization(runParameters);
+    ActionInitialization* actionInitialization = new ActionInitialization(runContext);
     runManager->SetUserInitialization(actionInitialization);
 
     runManager->Initialize();
 
-    auto analysisManager = G4CsvAnalysisManager::Instance();
-    analysisManager->OpenFile("myAnalysis.csv"); // for some reason the file must be open during run
-    analysisManager->CreateNtuple("PrimaryEnergy", "Spectrum and Dose"); // name and title
-    analysisManager->CreateNtupleDColumn("PrimaryEnergy/MeV");
-    analysisManager->CreateNtupleDColumn("Dose/gray");
-    analysisManager->FinishNtuple();
+    analysis.Initialize();
 
     if (argc == 2) {
         visualize(argc, argv);
@@ -94,10 +95,8 @@ int main(int argc, char** argv) {
         batch_run(runManager, runParameters);
     }
 
-    analysisManager->Write();
-    analysisManager->CloseFile();
+    analysis.Finish();
 
-    delete analysisManager; // in B4 they also delete the analysisManager, even if it is static??
     delete runManager;
 
     return 0;

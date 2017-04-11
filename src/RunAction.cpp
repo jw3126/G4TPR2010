@@ -5,9 +5,9 @@
 #include "G4CsvAnalysisManager.hh"
 #include "G4Run.hh"
 
-RunAction::RunAction(RunParameters& runParameters) :
+RunAction::RunAction(RunContext& ctx) :
         fDose("Dose10", 0),
-        fRunParameters(runParameters)
+        fRunContext(ctx)
 {
     G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
     accumulableManager->RegisterAccumulable(fDose);
@@ -34,7 +34,7 @@ void RunAction::EndOfRunAction(const G4Run* run){
 
     G4double dose10 = fDose.GetValue();
     if (IsMaster()) {
-        EndOfRunActionMasterFinal(run);
+        EndOfRunActionMasterExtra(run);
         G4cout
                 << G4endl
                 << "--------------------End of Global Run-----------------------"
@@ -51,15 +51,8 @@ void RunAction::EndOfRunAction(const G4Run* run){
     G4cout << "dose10:" << dose10 << G4endl;
 }
 
-void RunAction::EndOfRunActionMasterFinal(const G4Run *) {
+void RunAction::EndOfRunActionMasterExtra(const G4Run *) {
     G4double dose10 = fDose.GetValue();
-    auto analysisManager = G4CsvAnalysisManager::Instance();
-
-    G4double energy = fRunParameters.primaryEnergy;
-
-    analysisManager->FillNtupleDColumn(0, energy/MeV);
-    analysisManager->FillNtupleDColumn(1, dose10/gray);
-    analysisManager->AddNtupleRow();
-    analysisManager->Write();
-
+    G4double energy = fRunContext.GetRunParameters().primaryEnergy;
+    fRunContext.GetAnalysis().Record(energy, dose10);
 }

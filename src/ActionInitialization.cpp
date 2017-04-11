@@ -3,20 +3,21 @@
 ActionInitialization::~ActionInitialization() {}
 
 void ActionInitialization::BuildForMaster() const {
-    RunAction* runAction = new RunAction(fRunParameters);
+    RunAction* runAction = new RunAction(fRunContext);
     SetUserAction(runAction);
 }
 
 void ActionInitialization::Build() const
 {
+    RunParameters& runParameters = fRunContext.GetRunParameters();
 
-    PrimaryGeneratorAction* primaryGeneratorAction = new PrimaryGeneratorAction(fRunParameters);
+    PrimaryGeneratorAction* primaryGeneratorAction = new PrimaryGeneratorAction(runParameters);
     SetUserAction(primaryGeneratorAction);
 
     SteppingAction* steppingAction = new SteppingAction();
     SetUserAction(steppingAction);
 
-    RunAction* runAction = new RunAction(fRunParameters);
+    RunAction* runAction = new RunAction(fRunContext);
     SetUserAction(runAction);
 
     EventAction* eventAction = new EventAction(runAction);

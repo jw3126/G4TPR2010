@@ -14,6 +14,7 @@ public:
     virtual void EndOfEventAction(const G4Event* );
 private:
     RunAction* fRunAction;
+    G4double ReadScorer(const G4Event* , const G4String , const G4int);
 };
 
 

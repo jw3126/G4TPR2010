@@ -5,7 +5,6 @@
 #include <G4VUserDetectorConstruction.hh>
 #include <G4GDMLParser.hh>
 #include "RunParameters.h"
-#include <G4GDMLParser.hh>
 
 class DetectorConstruction: public G4VUserDetectorConstruction {
 
@@ -15,10 +14,7 @@ public:
             fRunParameters(runParameters)
     {};
 
-    ~DetectorConstruction(){
-        // what do I need to delete?
-        // fParser is a ref, so I do not delete it?
-    };
+    ~DetectorConstruction(){};
 
     virtual void ConstructSDandField();
 

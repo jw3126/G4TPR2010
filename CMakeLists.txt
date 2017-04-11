@@ -22,5 +22,5 @@ configure_file(${PROJECT_SOURCE_DIR}/geometry.gdml
         COPYONLY
         )
 
-add_executable(G4TPR2010 main.cpp ${sources} ${headers})
+add_executable(G4TPR2010 main.cpp ${sources} ${headers} src/RunConext.cpp include/RunConext.h src/Analysis.cpp include/Analysis.h)
 target_link_libraries(G4TPR2010 ${Geant4_LIBRARIES})

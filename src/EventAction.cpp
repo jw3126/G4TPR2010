@@ -11,7 +11,7 @@ void EventAction::BeginOfEventAction(const G4Event* ){
 
 // should this be put into a class?
 // why is this so involved, is there a simpler way?
-G4double ReadScorer(const G4Event* evt, const G4String scorerName, const G4int copyNo=0) {
+G4double EventAction::ReadScorer(const G4Event* evt, const G4String scorerName, const G4int copyNo=0) {
 
     G4SDManager* sdManager = G4SDManager::GetSDMpointer();
     G4HCofThisEvent* HCE = evt->GetHCofThisEvent();

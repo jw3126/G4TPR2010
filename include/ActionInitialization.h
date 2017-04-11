@@ -10,12 +10,12 @@
 class ActionInitialization: public G4VUserActionInitialization {
 
 public:
-    ActionInitialization(RunParameters& runParameters):fRunParameters(runParameters){};
+    ActionInitialization(RunContext& runContext):fRunContext(runContext){};
     virtual ~ActionInitialization();
     virtual void BuildForMaster() const;
     virtual void Build() const;
 private:
-    RunParameters& fRunParameters;
+    RunContext& fRunContext;
 };
 
 
