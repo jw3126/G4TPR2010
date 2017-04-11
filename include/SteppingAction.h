@@ -15,5 +15,4 @@ public:
     virtual void UserSteppingAction(const G4Step* step);
 };
 
-
 #endif //G4TPR2010_STEPPINGACTION_H

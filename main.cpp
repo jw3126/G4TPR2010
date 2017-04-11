@@ -4,7 +4,6 @@
 #include <G4VisExecutive.hh>
 #include <G4UImanager.hh>
 #include <G4UIExecutive.hh>
-#include <G4GDMLParser.hh>
 
 #include "ActionInitialization.h"
 #include "DetectorConstruction.h"
@@ -14,6 +13,12 @@
 #include "G4MTRunManager.hh"
 #else
 #include "G4RunManager.hh"
+#endif
+
+#ifdef G4MULTITHREADED
+#define RUNMANAGER G4MTRunManager
+#else
+#define RUNMANAGER G4RunManager
 #endif
 
 void visualize(int argc, char** argv) {
@@ -29,45 +34,64 @@ void visualize(int argc, char** argv) {
     delete ui;
 }
 
+void batch_run(RUNMANAGER* runManager, RunParameters& runParameters) {
+
+    double E, E0, dE, Emax;
+    E0 = 100*keV;
+    dE = 100*keV;
+    Emax = 6*MeV;
+
+    for (E=E0; E<=Emax; E+=dE) {
+        runParameters.primaryEnergy = E;
+        runManager->BeamOn(runParameters.nEvent);
+    }
+
+}
+
+RUNMANAGER* GetRunManager() {
+#ifdef G4MULTITHREADED
+    auto runManager = new G4MTRunManager;
+    runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
+#else
+    auto runManager = new G4RunManager;
+#endif
+    return runManager;
+}
 
 int main(int argc, char** argv) {
     G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
-#ifdef G4MULTITHREADED
-    G4MTRunManager* runManager = new G4MTRunManager;
-#else
-    G4RunManager* runManager = new G4RunManager;
-#endif
+    G4MTRunManager* runManager = GetRunManager();
+
+    RunParameters runParameters = RunParameters();
+    runParameters.geometryPath = "geometry.gdml";
+    runParameters.primaryEnergy = 6*MeV;
+    runParameters.nEvent = 100000;
 
 
-    G4GDMLParser parser;
-    G4bool validate = false;
-    parser.Read("geometry.gdml", validate);
-
-    DetectorConstruction* detectorConstruction = new DetectorConstruction(parser);
+    DetectorConstruction* detectorConstruction = new DetectorConstruction(runParameters);
     runManager->SetUserInitialization(detectorConstruction);
 
     G4VModularPhysicsList* physicsList = new QBBC;
     physicsList->SetVerboseLevel(0);
     runManager->SetUserInitialization(physicsList);
 
-    ActionInitialization* actionInitialization = new ActionInitialization();
+    ActionInitialization* actionInitialization = new ActionInitialization(runParameters);
     runManager->SetUserInitialization(actionInitialization);
 
     runManager->Initialize();
 
     auto analysisManager = G4CsvAnalysisManager::Instance();
     analysisManager->OpenFile("myAnalysis.csv"); // for some reason the file must be open during run
-    analysisManager->CreateNtuple("Spectrum", "Spectrum and Dose"); // name and title
-    analysisManager->CreateNtupleDColumn("Spectrum");
-    analysisManager->CreateNtupleDColumn("Dose");
+    analysisManager->CreateNtuple("PrimaryEnergy", "Spectrum and Dose"); // name and title
+    analysisManager->CreateNtupleDColumn("PrimaryEnergy/MeV");
+    analysisManager->CreateNtupleDColumn("Dose/gray");
     analysisManager->FinishNtuple();
 
-
-    if (argc == 1) {
+    if (argc == 2) {
         visualize(argc, argv);
     } else {
-        runManager->BeamOn(10);
+        batch_run(runManager, runParameters);
     }
 
     analysisManager->Write();

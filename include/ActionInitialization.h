@@ -5,14 +5,17 @@
 #include "PrimaryGeneratorAction.h"
 #include "EventAction.h"
 #include "SteppingAction.h"
+#include "RunParameters.h"
 
 class ActionInitialization: public G4VUserActionInitialization {
 
 public:
-    ActionInitialization() ;
+    ActionInitialization(RunParameters& runParameters):fRunParameters(runParameters){};
     virtual ~ActionInitialization();
     virtual void BuildForMaster() const;
     virtual void Build() const;
+private:
+    RunParameters& fRunParameters;
 };
 
 

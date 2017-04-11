@@ -9,7 +9,11 @@
 
 G4VPhysicalVolume* DetectorConstruction::Construct() {
 
-    G4VPhysicalVolume* physicalWorld = fParser.GetWorldVolume();
+    G4GDMLParser parser;
+    G4bool validate = false;
+    parser.Read(fRunParameters.geometryPath, validate);
+
+    G4VPhysicalVolume* physicalWorld = parser.GetWorldVolume();
     G4bool hasOverlaps = physicalWorld->CheckOverlaps();
 
     if (hasOverlaps) {

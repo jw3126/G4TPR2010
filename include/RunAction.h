@@ -6,11 +6,12 @@
 #include <G4ios.hh>
 #include <G4Accumulable.hh>
 #include "PrimaryGeneratorAction.h"
+#include "RunParameters.h"
 
 class RunAction : public G4UserRunAction{
 
 public:
-    RunAction();
+    RunAction(RunParameters& runParameters);
     ~RunAction();
     virtual void BeginOfRunAction(const G4Run*);
     virtual void EndOfRunAction(const G4Run*);
@@ -19,6 +20,7 @@ public:
 private:
     G4Accumulable<G4double> fDose;
     void EndOfRunActionMasterFinal(const G4Run* );
+    RunParameters& fRunParameters;
 };
 
 

@@ -4,14 +4,16 @@
 
 #include <G4VUserDetectorConstruction.hh>
 #include <G4GDMLParser.hh>
+#include "RunParameters.h"
+#include <G4GDMLParser.hh>
 
 class DetectorConstruction: public G4VUserDetectorConstruction {
 
 public:
-    DetectorConstruction(const G4GDMLParser& parser):G4VUserDetectorConstruction(),
-    fParser(parser)
-    {
-    };
+    DetectorConstruction(RunParameters& runParameters):
+            G4VUserDetectorConstruction(),
+            fRunParameters(runParameters)
+    {};
 
     ~DetectorConstruction(){
         // what do I need to delete?
@@ -22,7 +24,7 @@ public:
 
     virtual G4VPhysicalVolume* Construct();
 private:
-    const G4GDMLParser& fParser;
+    RunParameters fRunParameters;
 };
 
 

@@ -7,7 +7,7 @@
         <position name="origin" x="0" y="0" z="0" unit="cm"/>
         <quantity name="lxVoxel" type="length" unit="mm" value="100"/>
         <quantity name="lyVoxel" type="length" unit="mm" value="100"/>
-        <quantity name="lzVoxel" type="length" unit="mm" value="10"/>
+        <quantity name="lzVoxel" type="length" unit="mm" value="40"/>
 
         <quantity name="lxTank" type="length" unit="cm" value="20"/>
         <quantity name="lyTank" type="length" unit="cm" value="20"/>

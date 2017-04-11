@@ -1,24 +1,22 @@
 #include <Randomize.hh>
 #include <assert.h>
+#include <RunParameters.h>
 #include "PrimaryGeneratorAction.h"
 
-PrimaryGeneratorAction::PrimaryGeneratorAction() : G4VUserPrimaryGeneratorAction(),
-    fEnergy(6*MeV),
-    fFieldShape(Rectangle())
+PrimaryGeneratorAction::PrimaryGeneratorAction(RunParameters& runParameters) :
+        G4VUserPrimaryGeneratorAction(),
+        fRunParameters(runParameters),
+        fFieldShape(Rectangle())
 {
     G4int n_particle = 1;
     fParticleGun = new G4ParticleGun(n_particle);
-
     setZSource(1*m);
+
     G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
     G4ParticleDefinition* gamma = particleTable -> FindParticle("gamma");
 
-    G4ParticleMomentum momentumDirection = G4ParticleMomentum(0,0,-1);
-    G4ThreeVector position = G4ThreeVector(0, 0, fZSource);
-
     fParticleGun->SetParticleDefinition(gamma);
-    fParticleGun->SetParticleEnergy(fEnergy);
-    fParticleGun->SetParticleMomentumDirection(momentumDirection);
+    fParticleGun->SetParticleEnergy(fRunParameters.primaryEnergy);
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction() {delete fParticleGun;}
@@ -64,21 +62,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
     fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
-const Rectangle &PrimaryGeneratorAction::getFieldShape() const {
-    return fFieldShape;
-}
-
-void PrimaryGeneratorAction::setFieldShape(const Rectangle &fieldShape) {
-    fFieldShape = fieldShape;
-}
-
-G4double PrimaryGeneratorAction::getZSource() const {
-    return fZSource;
-}
-
 void PrimaryGeneratorAction::setZSource(G4double zSource) {
     fZSource = zSource;
     G4ThreeVector position = G4ThreeVector(0, 0, fZSource);
     fParticleGun->SetParticlePosition(position);
-
 }

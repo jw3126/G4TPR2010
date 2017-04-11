@@ -5,16 +5,12 @@
 #include "G4CsvAnalysisManager.hh"
 #include "G4Run.hh"
 
-RunAction::RunAction() :
-        fDose("Dose10", 0)
+RunAction::RunAction(RunParameters& runParameters) :
+        fDose("Dose10", 0),
+        fRunParameters(runParameters)
 {
     G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
     accumulableManager->RegisterAccumulable(fDose);
-
-    G4CsvAnalysisManager* analysisManager = G4CsvAnalysisManager::Instance();
-    // analysisManager->SetNtupleMerging(false); // does not exist for csv manager
-
-
 }
 
 RunAction::~RunAction(){
@@ -59,11 +55,11 @@ void RunAction::EndOfRunActionMasterFinal(const G4Run *) {
     G4double dose10 = fDose.GetValue();
     auto analysisManager = G4CsvAnalysisManager::Instance();
 
-    G4double energy = 6*MeV; //fPrimaryGeneratorAction->getEnergy();
+    G4double energy = fRunParameters.primaryEnergy;
 
     analysisManager->FillNtupleDColumn(0, energy/MeV);
-    analysisManager->FillNtupleDColumn(1, dose10);
+    analysisManager->FillNtupleDColumn(1, dose10/gray);
     analysisManager->AddNtupleRow();
-
+    analysisManager->Write();
 
 }

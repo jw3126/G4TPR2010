@@ -8,6 +8,7 @@
 
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
+#include "RunParameters.h"
 
 // A Rectangle for defining field shapes
 struct Rectangle {
@@ -27,33 +28,15 @@ struct Rectangle {
 class PrimaryGeneratorAction: public G4VUserPrimaryGeneratorAction {
 
 public:
-    PrimaryGeneratorAction();
+    PrimaryGeneratorAction(RunParameters& runParameters);
     ~PrimaryGeneratorAction();
     virtual void GeneratePrimaries(G4Event* );
-
-public:
-    const Rectangle &getFieldShape() const;
-
-    void setFieldShape(const Rectangle &fFieldShape);
-    G4double getZSource() const;
     void setZSource(G4double fZSource);
 
 private:
     G4double fZSource;
-    G4double fEnergy;
-public:
-    G4double getEnergy() const {
-        return fEnergy;
-    }
-
-    void setEnergy(G4double energy) {
-        fEnergy = energy;
-    }
-
-private:
+    RunParameters& fRunParameters;
     G4ParticleGun* fParticleGun;
-
-private:
     Rectangle fFieldShape;
     G4ThreeVector GenerateMomentum();
 
