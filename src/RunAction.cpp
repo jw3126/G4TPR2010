@@ -55,4 +55,5 @@ void RunAction::EndOfRunActionMasterExtra(const G4Run *) {
     G4double dose10 = fDose.GetValue();
     G4double energy = fRunContext.GetRunParameters().primaryEnergy;
     fRunContext.GetAnalysis().Record(energy, dose10);
+    G4cout << fRunContext.GetRunParameters().primaryEnergy << G4endl;
 }

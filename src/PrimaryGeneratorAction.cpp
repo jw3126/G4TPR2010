@@ -1,11 +1,12 @@
 #include <Randomize.hh>
 #include <assert.h>
 #include <RunParameters.h>
+#include <RunConext.h>
 #include "PrimaryGeneratorAction.h"
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(RunParameters& runParameters) :
+PrimaryGeneratorAction::PrimaryGeneratorAction(RunContext& ctx) :
         G4VUserPrimaryGeneratorAction(),
-        fRunParameters(runParameters),
+        fRunContext(ctx),
         fFieldShape(Rectangle())
 {
     G4int n_particle = 1;
@@ -16,7 +17,6 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(RunParameters& runParameters) :
     G4ParticleDefinition* gamma = particleTable -> FindParticle("gamma");
 
     fParticleGun->SetParticleDefinition(gamma);
-    fParticleGun->SetParticleEnergy(fRunParameters.primaryEnergy);
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction() {delete fParticleGun;}
@@ -45,6 +45,7 @@ G4ThreeVector PrimaryGeneratorAction::GenerateMomentum()
         p = (z*z) / r2;
         assert(0 < p);
         assert(p <= 1);
+        assert(0.1 < p);  // otherwise we should implement a more efficient generator.
 
         accept =  (G4UniformRand() < p);
         if (accept) {
@@ -58,6 +59,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
     // TODO there should be a builtin function to generate divergent fields
     G4ParticleMomentum momentumDirection = GenerateMomentum();
 
+    // in principle energy needs to be set only at run starts
+    fParticleGun->SetParticleEnergy(fRunContext.GetRunParameters().primaryEnergy);
     fParticleGun->SetParticleMomentumDirection(momentumDirection);
     fParticleGun->GeneratePrimaryVertex(anEvent);
 }

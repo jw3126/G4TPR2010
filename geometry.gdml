@@ -48,7 +48,7 @@
             <solidref ref="ScoringBox"/>
         </volume>
         <volume name="Tank">
-            <materialref ref="Air"/>
+            <materialref ref="Water"/>
             <solidref ref="TankBox"/>
             <physvol>
                 <volumeref ref="ScoringVoxel"/>

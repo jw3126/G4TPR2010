@@ -9,9 +9,9 @@ void ActionInitialization::BuildForMaster() const {
 
 void ActionInitialization::Build() const
 {
-    RunParameters& runParameters = fRunContext.GetRunParameters();
+//    RunParameters& runParameters = fRunContext.GetRunParameters();
 
-    PrimaryGeneratorAction* primaryGeneratorAction = new PrimaryGeneratorAction(runParameters);
+    PrimaryGeneratorAction* primaryGeneratorAction = new PrimaryGeneratorAction(fRunContext);
     SetUserAction(primaryGeneratorAction);
 
     SteppingAction* steppingAction = new SteppingAction();
