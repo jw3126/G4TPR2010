@@ -9,6 +9,20 @@
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 
+struct Rectangle {
+    G4double x_min;
+    G4double x_max;
+    G4double y_min;
+    G4double y_max;
+    Rectangle():
+            x_min(-5*cm),
+            x_max(5*cm),
+            y_min(-5*cm),
+            y_max(5*cm)
+    {}
+};
+
+
 class PrimaryGeneratorAction: public G4VUserPrimaryGeneratorAction {
 
 public:
@@ -16,8 +30,30 @@ public:
     ~PrimaryGeneratorAction();
     virtual void GeneratePrimaries(G4Event* );
 
+public:
+    const Rectangle &getFieldShape() const;
+
+    void setFieldShape(const Rectangle &fFieldShape);
+    G4double getZSource() const;
+    void setZSource(G4double fZSource);
+
+private:
+    G4double fZSource;
+    G4double fEnergy;
+public:
+    G4double getEnergy() const {
+        return fEnergy;
+    }
+
+    void setEnergy(G4double energy) {
+        fEnergy = energy;
+    }
+
 private:
     G4ParticleGun* fParticleGun;
+    Rectangle fFieldShape;
+    G4ThreeVector GenerateMomentum();
+
 };
 
 

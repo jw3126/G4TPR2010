@@ -15,13 +15,14 @@ public:
 
     ~DetectorConstruction(){
         // what do I need to delete?
+        // fParser is a ref, so I do not delete it?
     };
 
     virtual void ConstructSDandField();
 
     virtual G4VPhysicalVolume* Construct();
 private:
-    const G4GDMLParser& fParser; // why not G4GDMLParser* ?
+    const G4GDMLParser& fParser;
 };
 
 
