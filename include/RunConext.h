@@ -24,6 +24,7 @@ public:
 private:
     Analysis& fAnalysis;
     RunParameters& fRunParameters;
+
 };
 
 

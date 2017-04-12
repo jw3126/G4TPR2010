@@ -1,0 +1,27 @@
+//
+// Created by jan on 12.04.17.
+//
+
+#ifndef G4TPR2010_UTIL_H
+#define G4TPR2010_UTIL_H
+
+#include <vector>
+#include <map>
+#include "G4Types.hh"
+
+using namespace std;
+
+template<typename K, typename V>
+inline G4bool HasKey(map<K, V> m, K k)
+{
+    return m.count(k) > 0;
+}
+
+template<typename T>
+inline G4bool HasElement(vector<T> v, T x) {
+    return ( find(v.begin(), v.end(), x) != v.end());
+}
+
+
+
+#endif //G4TPR2010_UTIL_H
