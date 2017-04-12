@@ -37,6 +37,6 @@ target_link_libraries(G4TPR2010 CommonSourceCode)
 # Make test executable
 file(GLOB TEST_SOURCES test/test_util.cpp)
 
-add_executable(TESTS test/catch_main.cpp ${TEST_SOURCES} test/catch_main.cpp test/test_util.cpp)
+add_executable(TESTS test/catch_main.cpp ${TEST_SOURCES} test/catch_main.cpp test/test_util.cpp test/test_scoring.cpp)
 target_link_libraries(TESTS Catch)
 target_link_libraries(TESTS CommonSourceCode)
