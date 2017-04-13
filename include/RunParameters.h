@@ -16,6 +16,7 @@ struct RunParameters {
     G4double primaryEnergy;
     G4String geometryPath;
     G4int nEvent;
+    G4int nThreads;
 
 
 };

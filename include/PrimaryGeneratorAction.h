@@ -9,7 +9,7 @@
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 #include "RunParameters.h"
-#include "RunConext.h"
+#include "RunContext.h"
 
 // A Rectangle for defining field shapes
 struct Rectangle {

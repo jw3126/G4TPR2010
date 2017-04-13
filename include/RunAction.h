@@ -7,8 +7,9 @@
 #include <G4Accumulable.hh>
 #include "PrimaryGeneratorAction.h"
 #include "RunParameters.h"
-#include "RunConext.h"
+#include "RunContext.h"
 #include "Scoring.h"
+#include <chrono>
 
 class RunAction : public G4UserRunAction{
 
@@ -24,6 +25,8 @@ private:
     void EndOfRunActionMasterExtra(const G4Run *);
     RunContext& fRunContext;
     Scoring fScoring; // the RunAction should own Scoring
+    std::chrono::steady_clock::time_point fStartTime;
+
 };
 
 

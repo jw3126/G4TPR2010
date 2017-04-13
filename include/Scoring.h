@@ -5,7 +5,7 @@
 
 #include <G4LogicalVolume.hh>
 #include <G4Accumulable.hh>
-#include "RunConext.h"
+#include "RunContext.h"
 #include "util.h"
 #include <G4AccumulableManager.hh>
 

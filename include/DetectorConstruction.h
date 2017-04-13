@@ -5,7 +5,7 @@
 #include <G4VUserDetectorConstruction.hh>
 #include <G4GDMLParser.hh>
 #include "RunParameters.h"
-#include "RunConext.h"
+#include "RunContext.h"
 
 class DetectorConstruction: public G4VUserDetectorConstruction {
 

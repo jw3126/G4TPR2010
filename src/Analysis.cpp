@@ -4,6 +4,8 @@
 
 #include <G4CsvAnalysisManager.hh>
 #include <assert.h>
+#include <chrono>
+#include <RunContext.h>
 #include "Analysis.h"
 #include "G4SystemOfUnits.hh"
 
@@ -16,7 +18,7 @@ Analysis::~Analysis() {
 void Analysis::Initialize() {
     auto am = G4CsvAnalysisManager::Instance();
 
-    am->OpenFile("myAnalysis.csv"); // for some reason the file must be open during run
+    am->OpenFile("Analysis.csv"); // for some reason the file must be open during run
     std::string tupleName, tupleTitle;
     am->CreateNtuple(tupleName="Results", tupleTitle="Primary Energy and eDep"); // name and title
     am->CreateNtupleDColumn("PrimaryEnergy/MeV");
@@ -25,22 +27,34 @@ void Analysis::Initialize() {
 
     am->CreateNtupleDColumn("mean eDep/MeV");
     am->CreateNtupleDColumn("std eDep/MeV");
+    am->CreateNtupleDColumn("time per Event/microsecond");
     am->FinishNtuple();
 }
 
-void Analysis::Record(G4double energy, std::string detname, G4int nEvents, G4double eDep, G4double eDep2)
+void Analysis::Record(G4double energy,
+                      std::string detname,
+                      G4double eDep,
+                      G4double eDep2,
+                      std::chrono::duration<int64_t, std::micro> t,
+                      RunContext& ctx
+)
 {
 
     auto am = G4CsvAnalysisManager::Instance();
+    G4int nEvents = ctx.GetRunParameters().nEvent;
+    G4int nThreads = ctx.GetRunParameters().nThreads;
 
     G4double std_one_gamma = Std(eDep, eDep2, nEvents);  // standard deviation of energy deposit of a single gamma
     G4double std = std_one_gamma / sqrt(nEvents);  // standard deviation of estimated mean energy deposit of one gamma
+    G4double nEventsPerThread = G4double(nEvents) / nThreads;
+    G4double tPerEvent = t.count() / nEventsPerThread;
 
     am->FillNtupleDColumn(0, energy/MeV);
     am->FillNtupleSColumn(1, detname);
     am->FillNtupleIColumn(2, nEvents);
     am->FillNtupleDColumn(3, Mean(eDep, nEvents) / MeV);
     am->FillNtupleDColumn(4, std / MeV);
+    am->FillNtupleDColumn(5, tPerEvent);
 
     am->AddNtupleRow();
     am->Write();

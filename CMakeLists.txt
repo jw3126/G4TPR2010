@@ -28,15 +28,14 @@ configure_file(${PROJECT_SOURCE_DIR}/geometry.gdml
         COPYONLY
         )
 
-add_library(CommonSourceCode ${sources} ${headers})
-target_link_libraries(CommonSourceCode ${Geant4_LIBRARIES})
+add_library(SourceCodeLib ${sources} ${headers})
+target_link_libraries(SourceCodeLib ${Geant4_LIBRARIES})
 add_executable(G4TPR2010 main.cpp) # ${sources} ${headers})
-#target_link_libraries(G4TPR2010 ${Geant4_LIBRARIES})
-target_link_libraries(G4TPR2010 CommonSourceCode)
+target_link_libraries(G4TPR2010 SourceCodeLib)
 
 # Make test executable
 file(GLOB TEST_SOURCES test/test_util.cpp)
 
 add_executable(TESTS test/catch_main.cpp ${TEST_SOURCES} test/catch_main.cpp test/test_util.cpp test/test_scoring.cpp)
 target_link_libraries(TESTS Catch)
-target_link_libraries(TESTS CommonSourceCode)
+target_link_libraries(TESTS SourceCodeLib)

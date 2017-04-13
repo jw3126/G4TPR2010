@@ -2,8 +2,8 @@
 // Created by jan on 11.04.17.
 //
 
-#ifndef G4TPR2010_RUNCONEXT_H
-#define G4TPR2010_RUNCONEXT_H
+#ifndef G4TPR2010_RUNCONTEXT_H
+#define G4TPR2010_RUNCONTEXT_H
 
 
 #include "Analysis.h"
@@ -23,8 +23,6 @@ public:
     RunParameters& GetRunParameters() {return fRunParameters;}
     G4GDMLParser& GetParser() {return fParser;}
 
-
-
 private:
     Analysis& fAnalysis;
     RunParameters& fRunParameters;
@@ -33,4 +31,4 @@ private:
 };
 
 
-#endif //G4TPR2010_RUNCONEXT_H
+#endif //G4TPR2010_RUNTCONEXT_H

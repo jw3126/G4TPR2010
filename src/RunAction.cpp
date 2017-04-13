@@ -44,6 +44,7 @@ RunAction::~RunAction(){
 
 void RunAction::BeginOfRunAction(const G4Run* ){
     fScoring.Reset();
+    fStartTime = std::chrono::steady_clock::now();
 
     if (IsMaster()) {
         G4double energy = fRunContext.GetRunParameters().primaryEnergy;
@@ -63,7 +64,13 @@ void RunAction::EndOfRunAction(const G4Run* run){
 
 void RunAction::EndOfRunActionMasterExtra(const G4Run *) {
     G4double E = fRunContext.GetRunParameters().primaryEnergy;
-    G4int N = fScoring.GetNumberOfEvents();
+
+    // sanity check
+    assert(fScoring.GetNumberOfEvents() == fRunContext.GetRunParameters().nEvent);
+
+    auto endTime = std::chrono::steady_clock::now();
+    std::chrono::duration<int64_t, std::micro> t;
+    t = std::chrono::duration_cast<std::chrono::microseconds>(endTime - fStartTime);
 
     auto& analysis = fRunContext.GetAnalysis();
     auto& names = fScoring.GetWatchedScorerNames();
@@ -72,7 +79,7 @@ void RunAction::EndOfRunActionMasterExtra(const G4Run *) {
         G4double eDep = fScoring.GetRunScore(name);
         G4double eDep2 = fScoring.GetRunScore2(name);
 
-        analysis.Record(E, name, N, eDep, eDep2);
+        analysis.Record(E, name, eDep, eDep2, t, fRunContext);
     }
     G4cout
             << G4endl

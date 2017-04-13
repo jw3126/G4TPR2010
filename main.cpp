@@ -4,7 +4,7 @@
 #include <G4VisExecutive.hh>
 #include <G4UImanager.hh>
 #include <G4UIExecutive.hh>
-#include <RunConext.h>
+#include <RunContext.h>
 
 #include "ActionInitialization.h"
 #include "DetectorConstruction.h"
@@ -52,7 +52,7 @@ void batch_run(RUNMANAGER* runManager, RunParameters& runParameters) {
 RUNMANAGER* GetRunManager() {
 #ifdef G4MULTITHREADED
     auto runManager = new G4MTRunManager;
-    runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
+    //runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
 #else
     auto runManager = new G4RunManager;
 #endif
@@ -62,7 +62,7 @@ RUNMANAGER* GetRunManager() {
 int main(int argc, char** argv) {
     G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
-    G4MTRunManager* runManager = GetRunManager();
+    RUNMANAGER* runManager = GetRunManager();
 
 
     Analysis analysis;
@@ -71,7 +71,8 @@ int main(int argc, char** argv) {
     RunParameters runParameters = RunParameters();
     runParameters.geometryPath = "geometry.gdml";
     runParameters.primaryEnergy = 6*MeV;
-    runParameters.nEvent = 100000;
+    runParameters.nEvent = 10000;
+    runParameters.nThreads = 4; //G4Threading::G4GetNumberOfCores();
 
     G4bool validate = false;
     G4GDMLParser parser;
@@ -89,7 +90,9 @@ int main(int argc, char** argv) {
 
     ActionInitialization* actionInitialization = new ActionInitialization(runContext);
     runManager->SetUserInitialization(actionInitialization);
-
+#ifdef G4MULTITHREADED
+    runManager->SetNumberOfThreads(runParameters.nThreads);
+#endif
     runManager->Initialize();
 
     analysis.Initialize();

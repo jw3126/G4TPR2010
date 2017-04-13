@@ -1,7 +1,7 @@
 #include <Randomize.hh>
 #include <assert.h>
 #include <RunParameters.h>
-#include <RunConext.h>
+#include <RunContext.h>
 #include "PrimaryGeneratorAction.h"
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(RunContext& ctx) :

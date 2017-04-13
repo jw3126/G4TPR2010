@@ -2,7 +2,7 @@
 // Created by jan on 11.04.17.
 //
 
-#include "RunConext.h"
+#include "RunContext.h"
 #include "G4SystemOfUnits.hh"
 #include "Analysis.h"
 #include "G4PhysicalConstants.hh"
