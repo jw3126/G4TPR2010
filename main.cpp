@@ -68,9 +68,6 @@ int main(int argc, char** argv) {
     Analysis analysis;
     analysis = Analysis();
 
-
-
-
     RunParameters runParameters = RunParameters();
     runParameters.geometryPath = "geometry.gdml";
     runParameters.primaryEnergy = 6*MeV;

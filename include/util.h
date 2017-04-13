@@ -7,7 +7,7 @@
 
 #include <vector>
 #include <map>
-
+#include "G4Types.hh"
 using namespace std;
 
 template<typename K, typename V>

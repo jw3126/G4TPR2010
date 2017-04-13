@@ -10,11 +10,31 @@ RunAction::RunAction(RunContext& ctx, Scoring scoring) :
         fRunContext(ctx),
         fScoring(scoring)
 {
+//    G4VPhysicalVolume* physicalWorld = fRunContext.GetParser().GetWorldVolume();
+//    fScoring.RegisterScorer(physicalWorld->GetLogicalVolume(), "edepWorld");
 
-    G4VPhysicalVolume* physicalWorld = fRunContext.GetParser().GetWorldVolume();
+    auto& fParser = fRunContext.GetParser();
+    const G4GDMLAuxMapType* auxmap = fParser.GetAuxMap();
+    G4cout << "Found " << auxmap->size()
+           << " volume(s) with auxiliary information."
+           << G4endl << G4endl;
+    for(G4GDMLAuxMapType::const_iterator iter=auxmap->begin();
+        iter!=auxmap->end(); iter++)
+    {
+        G4LogicalVolume* vol = ((*iter).first);
+        for (G4GDMLAuxListType::const_iterator vit=(*iter).second.begin();
+             vit!=(*iter).second.end(); vit++)
+        {
+            std::string type = (*vit).type;
+            std::string value = (*vit).value;
+            if (type == "eDep") {
+                fScoring.RegisterScorer(vol, value);
+            } else {
+                G4cout << "auxtype = " << type << " not supported." << G4endl;
+            }
 
-    fScoring.RegisterScorer(physicalWorld->GetLogicalVolume(), "edepWorld");
-
+        }
+    }
 
 }
 
@@ -34,29 +54,29 @@ void RunAction::BeginOfRunAction(const G4Run* ){
 
 
 void RunAction::EndOfRunAction(const G4Run* run){
-
-
-    G4cout << fScoring.GetRunScore("edepWorld") << G4endl;
     fScoring.Merge();
-    G4cout << fScoring.GetRunScore("edepWorld") << G4endl;
-
     if (IsMaster()) {
         EndOfRunActionMasterExtra(run);
-        G4cout
-                << G4endl
-                << "--------------------End of Global Run-----------------------"
-                << G4endl
-                ;
     }
-    else {
-        G4cout
-                << G4endl
-                << "--------------------End of Local Run------------------------"
-                << G4endl
-                ;
-    }
+
 }
 
 void RunAction::EndOfRunActionMasterExtra(const G4Run *) {
+    G4double E = fRunContext.GetRunParameters().primaryEnergy;
+    G4int N = fScoring.GetNumberOfEvents();
 
+    auto& analysis = fRunContext.GetAnalysis();
+    auto& names = fScoring.GetWatchedScorerNames();
+    for(auto i=names.begin(); i!=names.end(); ++i) {
+        std::string name = *i;
+        G4double eDep = fScoring.GetRunScore(name);
+        G4double eDep2 = fScoring.GetRunScore2(name);
+
+        analysis.Record(E, name, N, eDep, eDep2);
+    }
+    G4cout
+            << G4endl
+            << "--------------------End of Global Run-----------------------"
+            << G4endl
+            ;
 }

@@ -3,16 +3,27 @@
 #include "Scoring.h"
 #include "util.h"
 
-Scoring::Scoring() {}
+Scoring::Scoring():
+        fNumberOfEvents(nullptr)
+{
+    fNumberOfEvents = new G4Accumulable<G4int>(0);
+    G4AccumulableManager* am = G4AccumulableManager::Instance();
+    am->RegisterAccumulable(fNumberOfEvents);
+}
 
 void Scoring::ResetAccumulable(std::string name) {
     *GetAccumulable(name) = 0;
 }
+void Scoring::ResetAccumulable2(std::string name) {
+    *GetAccumulable2(name) = 0;
+}
 
-void Scoring::ResetAccumulables() {
+void Scoring::ResetRun() {
     for (auto i = fWatchedScorerNames.begin(); i != fWatchedScorerNames.end(); ++i) {
         ResetAccumulable(*i);
+        ResetAccumulable2(*i);
     }
+    *fNumberOfEvents = 0;
 }
 
 void Scoring::ResetEventScores() {
@@ -48,11 +59,14 @@ void Scoring::RegisterScorer(G4LogicalVolume* vol, string name) {
         snames.push_back(name);
         GetEventScore(name) = 0.;
 
-        G4Accumulable<double>* acc = new G4Accumulable<double>(0);
         G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+        G4Accumulable<double>* acc = new G4Accumulable<double>(0);
         accumulableManager->RegisterAccumulable(acc);
         fAccumulableByName[name] = acc;
 
+        G4Accumulable<double>* acc2 = new G4Accumulable<double>(0);
+        accumulableManager->RegisterAccumulable(acc2);
+        fAccumulable2ByName[name] = acc2;
     };
 
     if (!HasElement(fWatchedLogicalVolumes, vol))
@@ -78,19 +92,29 @@ void Scoring::AddEventScore(G4LogicalVolume *vol, G4double edep) {
 G4double Scoring::GetRunScore(std::string name) {
     return GetAccumulable(name) -> GetValue();
 }
+G4double Scoring::GetRunScore2(std::string name) {
+    return GetAccumulable2(name) -> GetValue();
+}
 
-void Scoring::FlushEventScores() {
+//G4double Scoring::GetRunStd(std::string name) {
+//
+//
+//}
+
+void Scoring::FinishEvent() {
+    *fNumberOfEvents += 1;
     for (auto i = fWatchedScorerNames.begin(); i != fWatchedScorerNames.end(); ++i) {
         G4double edep = GetEventScore(*i);
         ResetEventScore(*i);
 
         auto acc = GetAccumulable(*i);
         *acc += edep;
+        auto acc2 = GetAccumulable2(*i);
+        *acc2 += edep*edep;
     }
 }
 
 void Scoring::Merge() {
-    FlushEventScores();
     G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
     accumulableManager->Merge();
 }

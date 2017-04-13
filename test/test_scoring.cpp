@@ -20,26 +20,37 @@ TEST_CASE( "Scoring", "[Scoring]" ) {
     G4Box* solid1 = new G4Box("solid1", 1,2,3);
     G4LogicalVolume* logic1 = new G4LogicalVolume(solid1, material1, "logic1");
     s.RegisterScorer(logic1, "dose1");
-
+    REQUIRE(s.GetNumberOfEvents() == 0);
     REQUIRE(s.IsWatched(logic1));
 
     REQUIRE(s.GetRunScore("dose1") == 0);
     s.AddEventScore(logic1, 12);
-    s.FlushEventScores();
+    s.FinishEvent();
+    REQUIRE(s.GetNumberOfEvents() == 1);
+    REQUIRE(s.GetNumberOfEvents() == 1);
+
     REQUIRE(s.GetRunScore("dose1") == 12);
-    s.FlushEventScores();
+    REQUIRE(s.GetRunScore2("dose1") == 12*12);
+
+    s.FinishEvent();
     REQUIRE(s.GetRunScore("dose1") == 12);
+    REQUIRE(s.GetRunScore2("dose1") == 12*12);
+    REQUIRE(s.GetNumberOfEvents() == 2);
 
     // another scorer watching the same volume
     s.RegisterScorer(logic1, "dose1b");
     REQUIRE(s.GetRunScore("dose1") == 12);
     REQUIRE(s.GetRunScore("dose1b") == 0);
-    s.FlushEventScores();
+    s.FinishEvent();
     REQUIRE(s.GetRunScore("dose1") == 12);
     REQUIRE(s.GetRunScore("dose1b") == 0);
+    REQUIRE(s.GetNumberOfEvents() == 3);
+
     s.AddEventScore(logic1, 4);
-    s.FlushEventScores();
+    s.FinishEvent();
     REQUIRE(s.GetRunScore("dose1") == 16);
+    REQUIRE(s.GetRunScore2("dose1") == 12*12 +4*4);
+
     REQUIRE(s.GetRunScore("dose1b") == 4);
 
     // another volume
@@ -49,20 +60,22 @@ TEST_CASE( "Scoring", "[Scoring]" ) {
 
     REQUIRE(s.GetRunScore("dose2") == 0);
     s.AddEventScore(logic1, 4);
-    s.FlushEventScores();
+    s.FinishEvent();
     REQUIRE(s.GetRunScore("dose2") == 0);
 
-    s.ResetAccumulables();
+    s.ResetRun();
+    REQUIRE(s.GetNumberOfEvents() == 0);
     REQUIRE(s.GetRunScore("dose1b") == 0);
+    REQUIRE(s.GetRunScore2("dose1b") == 0);
 
     // scorer watching two volumes
     s.RegisterScorer(logic1, "dose12");
     s.RegisterScorer(logic2, "dose12");
     s.AddEventScore(logic1, 1);
-    s.FlushEventScores();
+    s.FinishEvent();
     REQUIRE(s.GetRunScore("dose12") == 1);
     s.AddEventScore(logic2, 2);
-    s.FlushEventScores();
+    s.FinishEvent();
     REQUIRE(s.GetRunScore("dose12") == 3);
     REQUIRE(s.GetRunScore("dose1") == 1);
     REQUIRE(s.GetRunScore("dose1b") == 1);

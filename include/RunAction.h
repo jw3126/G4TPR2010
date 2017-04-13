@@ -19,7 +19,7 @@ public:
     virtual void EndOfRunAction(const G4Run*);
 
     inline void AddEventScore(G4LogicalVolume* vol, G4double dose) {fScoring.AddEventScore(vol, dose);}
-    void FlushEventScore() {fScoring.FlushEventScores();}
+    void FinishEvent() { fScoring.FinishEvent();}
 private:
     void EndOfRunActionMasterExtra(const G4Run *);
     RunContext& fRunContext;

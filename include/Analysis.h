@@ -13,8 +13,10 @@ public:
     ~Analysis();
     void Initialize();
     void Finish();
-    void Write();
-    void Record(G4double, G4double);
+    void Record(G4double primaryEnergy, std::string detectorName, G4int nEvents, G4double eDep, G4double eDep2);
+private:
+    G4double Std(G4double, G4double , G4int);
+    G4double Mean(G4double eDep, G4int nEvents);
 };
 
 

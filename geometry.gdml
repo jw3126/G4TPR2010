@@ -5,13 +5,13 @@
     <define>
         <rotation name="identity" x="0" y="0" z="0"/>
         <position name="origin" x="0" y="0" z="0" unit="cm"/>
-        <quantity name="lxVoxel" type="length" unit="mm" value="100"/>
-        <quantity name="lyVoxel" type="length" unit="mm" value="100"/>
-        <quantity name="lzVoxel" type="length" unit="mm" value="40"/>
+        <quantity name="lxVoxel" type="length" unit="mm" value="10"/>
+        <quantity name="lyVoxel" type="length" unit="mm" value="10"/>
+        <quantity name="lzVoxel" type="length" unit="mm" value="10"/>
 
         <quantity name="lxTank" type="length" unit="cm" value="20"/>
         <quantity name="lyTank" type="length" unit="cm" value="20"/>
-        <quantity name="lzTank" type="length" unit="cm" value="50"/>
+        <quantity name="lzTank" type="length" unit="cm" value="40"/>
     </define>
 
     <materials>
@@ -46,6 +46,8 @@
         <volume name="ScoringVoxel">
             <materialref ref="Water"/>
             <solidref ref="ScoringBox"/>
+            <auxiliary auxtype="eDep" auxvalue="detScoringVoxel"/>
+            <auxiliary auxtype="eDep" auxvalue="detAll"/>
         </volume>
         <volume name="Tank">
             <materialref ref="Water"/>
@@ -55,6 +57,8 @@
                 <positionref ref="origin"/>
                 <rotationref ref="identity"/>
             </physvol>
+            <auxiliary auxtype="eDep" auxvalue="detTank"/>
+            <auxiliary auxtype="eDep" auxvalue="detAll"/>
         </volume>
 
         <volume name="World">
@@ -65,6 +69,8 @@
                 <positionref ref="origin"/>
                 <rotationref ref="identity"/>
             </physvol>
+            <auxiliary auxtype="eDep" auxvalue="detWorld"/>
+            <auxiliary auxtype="eDep" auxvalue="detAll"/>
         </volume>
     </structure>
 
