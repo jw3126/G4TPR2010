@@ -9,11 +9,8 @@
 
 G4VPhysicalVolume* DetectorConstruction::Construct() {
 
-    G4GDMLParser parser;
-    G4bool validate = false;
-    parser.Read(fRunParameters.geometryPath, validate);
 
-    G4VPhysicalVolume* physicalWorld = parser.GetWorldVolume();
+    G4VPhysicalVolume* physicalWorld = fRunContext.GetParser().GetWorldVolume();
     G4bool hasOverlaps = physicalWorld->CheckOverlaps();
 
     if (hasOverlaps) {
@@ -26,12 +23,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 }
 
 void DetectorConstruction::ConstructSDandField() {
-    G4SDManager* sdManager = G4SDManager::GetSDMpointer();
-
-    G4MultiFunctionalDetector *detector = new G4MultiFunctionalDetector("detector");
-    G4VPrimitiveScorer* psDose = new G4PSDoseDeposit("dose");
-    detector->RegisterPrimitive(psDose);
-    SetSensitiveDetector("ScoringVoxel", detector);
-    sdManager->AddNewDetector(detector);
+//    G4SDManager* sdManager = G4SDManager::GetSDMpointer();
+//
+//    G4MultiFunctionalDetector *detector = new G4MultiFunctionalDetector("detector");
+//    G4VPrimitiveScorer* psDose = new G4PSDoseDeposit("dose");
+//    detector->RegisterPrimitive(psDose);
+//    SetSensitiveDetector("ScoringVoxel", detector);
+//    sdManager->AddNewDetector(detector);
 
 }

@@ -64,11 +64,13 @@ void Scoring::RegisterScorer(G4LogicalVolume* vol, string name) {
 
 }
 
-void Scoring::AddEventScore(G4LogicalVolume *vol, G4double dose) {
-    if ( IsWatched(vol) ) {
-        vector<string>& names = GetNames(vol);
-        for(auto i=names.begin(); i!=names.end(); ++i) {
-            GetEventScore(*i) += dose;
+void Scoring::AddEventScore(G4LogicalVolume *vol, G4double edep) {
+    if (edep > 0) {
+        if (IsWatched(vol))  {
+            vector<string> &names = GetNames(vol);
+            for (auto i = names.begin(); i != names.end(); ++i) {
+                GetEventScore(*i) += edep;
+            }
         }
     }
 }
@@ -79,10 +81,16 @@ G4double Scoring::GetRunScore(std::string name) {
 
 void Scoring::FlushEventScores() {
     for (auto i = fWatchedScorerNames.begin(); i != fWatchedScorerNames.end(); ++i) {
-        G4double dose = GetEventScore(*i);
+        G4double edep = GetEventScore(*i);
         ResetEventScore(*i);
 
         auto acc = GetAccumulable(*i);
-        *acc += dose;
+        *acc += edep;
     }
+}
+
+void Scoring::Merge() {
+    FlushEventScores();
+    G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+    accumulableManager->Merge();
 }

@@ -18,7 +18,7 @@ public:
 
     void RegisterScorer(G4LogicalVolume*, std::string name);
 
-    void AddEventScore(G4LogicalVolume *volume, G4double dose);
+    void AddEventScore(G4LogicalVolume *volume, G4double edep);
     inline G4double& GetEventScore(std::string name) { return fEventScoreByName[name]; }
 
     G4double GetRunScore(std::string name); // should this flush automatically?
@@ -28,6 +28,7 @@ public:
     void ResetAccumulables();
     void ResetEventScores(); // this should be done automatically, when UpdateRunScorers is called
     void Reset(){ResetEventScores(); ResetAccumulables();}
+    void Merge();
 
 private:
     // TODO

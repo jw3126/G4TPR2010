@@ -8,20 +8,22 @@
 #include "PrimaryGeneratorAction.h"
 #include "RunParameters.h"
 #include "RunConext.h"
+#include "Scoring.h"
 
 class RunAction : public G4UserRunAction{
 
 public:
-    RunAction(RunContext& runContext);
+    RunAction(RunContext&, Scoring);
     ~RunAction();
     virtual void BeginOfRunAction(const G4Run*);
     virtual void EndOfRunAction(const G4Run*);
 
-    void UpdateDose(G4double dose);
+    inline void AddEventScore(G4LogicalVolume* vol, G4double dose) {fScoring.AddEventScore(vol, dose);}
+    void FlushEventScore() {fScoring.FlushEventScores();}
 private:
-    G4Accumulable<G4double> fDose;
     void EndOfRunActionMasterExtra(const G4Run *);
     RunContext& fRunContext;
+    Scoring fScoring; // the RunAction should own Scoring
 };
 
 

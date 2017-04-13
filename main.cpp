@@ -67,15 +67,23 @@ int main(int argc, char** argv) {
 
     Analysis analysis;
     analysis = Analysis();
+
+
+
+
     RunParameters runParameters = RunParameters();
     runParameters.geometryPath = "geometry.gdml";
     runParameters.primaryEnergy = 6*MeV;
     runParameters.nEvent = 100000;
 
-    RunContext runContext = RunContext(analysis, runParameters);
+    G4bool validate = false;
+    G4GDMLParser parser;
+    parser.Read(runParameters.geometryPath, validate);
+
+    RunContext runContext = RunContext(analysis, runParameters, parser);
 
 
-    DetectorConstruction* detectorConstruction = new DetectorConstruction(runParameters);
+    DetectorConstruction* detectorConstruction = new DetectorConstruction(runContext);
     runManager->SetUserInitialization(detectorConstruction);
 
     G4VModularPhysicsList* physicsList = new QBBC;

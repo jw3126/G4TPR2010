@@ -13,17 +13,22 @@ class RunContext {
 
 public:
 
-    RunContext(Analysis& analysis, RunParameters& param):
+    RunContext(Analysis& analysis, RunParameters& param, G4GDMLParser& parser):
     fAnalysis(analysis),
-    fRunParameters(param)
+    fRunParameters(param),
+    fParser(parser)
     {}
 
     Analysis& GetAnalysis() {return fAnalysis;}
     RunParameters& GetRunParameters() {return fRunParameters;}
+    G4GDMLParser& GetParser() {return fParser;}
+
+
 
 private:
     Analysis& fAnalysis;
     RunParameters& fRunParameters;
+    G4GDMLParser& fParser;
 
 };
 

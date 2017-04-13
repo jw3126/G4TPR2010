@@ -5,13 +5,14 @@
 #include <G4VUserDetectorConstruction.hh>
 #include <G4GDMLParser.hh>
 #include "RunParameters.h"
+#include "RunConext.h"
 
 class DetectorConstruction: public G4VUserDetectorConstruction {
 
 public:
-    DetectorConstruction(RunParameters& runParameters):
+    DetectorConstruction(RunContext& ctx):
             G4VUserDetectorConstruction(),
-            fRunParameters(runParameters)
+            fRunContext(ctx)
     {};
 
     ~DetectorConstruction(){};
@@ -20,7 +21,7 @@ public:
 
     virtual G4VPhysicalVolume* Construct();
 private:
-    RunParameters fRunParameters;
+    RunContext& fRunContext;
 };
 
 

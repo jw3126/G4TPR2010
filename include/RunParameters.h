@@ -8,6 +8,7 @@
 
 #include <pwdefs.hh>
 #include <G4String.hh>
+#include <G4GDMLParser.hh>
 
 // Encapsulates parameters that are constant over a single run.
 struct RunParameters {
@@ -15,6 +16,7 @@ struct RunParameters {
     G4double primaryEnergy;
     G4String geometryPath;
     G4int nEvent;
+
 
 };
 
