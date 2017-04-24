@@ -23,7 +23,6 @@ public:
 
     G4double GetRunScore(std::string name);
     G4double GetRunScore2(std::string name);
-    G4double GetRunStd(std::string name);
     inline G4int GetNumberOfEvents() {return fNumberOfEvents->GetValue();}
 
     Scoring();
@@ -38,8 +37,6 @@ public:
     void Merge();
 
 private:
-    // TODO
-    //void Merge(); // merge accumulables
 
     void ResetEventScore(std::string name);
     void ResetEventScores();
@@ -53,8 +50,6 @@ private:
     G4Accumulable<G4double>* GetAccumulable(std::string name) { return fAccumulableByName[name]; }
     G4Accumulable<G4double>* GetAccumulable2(std::string name) { return fAccumulable2ByName[name]; }
 
-
-
 private:
 
     // general bookkeeping
@@ -65,8 +60,6 @@ private:
 
     // containers accumulating information over a single event:
     std::map<std::string, G4double> fEventScoreByName;
-
-
 
     // facilities for accumulating information over whole run
     std::map<std::string, G4Accumulable<G4double>*> fAccumulableByName;

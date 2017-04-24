@@ -18,7 +18,6 @@ struct RunParameters {
     G4int nEvent;
     G4int nThreads;
 
-
 };
 
 

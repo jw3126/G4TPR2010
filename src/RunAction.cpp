@@ -18,8 +18,7 @@ RunAction::RunAction(RunContext& ctx, Scoring scoring) :
     G4cout << "Found " << auxmap->size()
            << " volume(s) with auxiliary information."
            << G4endl << G4endl;
-    for(G4GDMLAuxMapType::const_iterator iter=auxmap->begin();
-        iter!=auxmap->end(); iter++)
+    for(G4GDMLAuxMapType::const_iterator iter=auxmap->begin(); iter!=auxmap->end(); iter++)
     {
         G4LogicalVolume* vol = ((*iter).first);
         for (G4GDMLAuxListType::const_iterator vit=(*iter).second.begin();
@@ -32,10 +31,8 @@ RunAction::RunAction(RunContext& ctx, Scoring scoring) :
             } else {
                 G4cout << "auxtype = " << type << " not supported." << G4endl;
             }
-
         }
     }
-
 }
 
 RunAction::~RunAction(){
@@ -66,7 +63,7 @@ void RunAction::EndOfRunActionMasterExtra(const G4Run *) {
     G4double E = fRunContext.GetRunParameters().primaryEnergy;
 
     // sanity check
-    assert(fScoring.GetNumberOfEvents() == fRunContext.GetRunParameters().nEvent);
+//    assert(fScoring.GetNumberOfEvents() == fRunContext.GetRunParameters().nEvent);
 
     auto endTime = std::chrono::steady_clock::now();
     std::chrono::duration<int64_t, std::micro> t;

@@ -65,21 +65,19 @@ int main(int argc, char** argv) {
     RUNMANAGER* runManager = GetRunManager();
 
 
-    Analysis analysis;
-    analysis = Analysis();
+    Analysis analysis = Analysis();
 
     RunParameters runParameters = RunParameters();
     runParameters.geometryPath = "geometry.gdml";
     runParameters.primaryEnergy = 6*MeV;
     runParameters.nEvent = 10000;
-    runParameters.nThreads = 4; //G4Threading::G4GetNumberOfCores();
+    runParameters.nThreads = G4Threading::G4GetNumberOfCores();
 
     G4bool validate = false;
     G4GDMLParser parser;
     parser.Read(runParameters.geometryPath, validate);
 
     RunContext runContext = RunContext(analysis, runParameters, parser);
-
 
     DetectorConstruction* detectorConstruction = new DetectorConstruction(runContext);
     runManager->SetUserInitialization(detectorConstruction);
@@ -97,7 +95,9 @@ int main(int argc, char** argv) {
 
     analysis.Initialize();
 
-    if (argc == 2) {
+    G4bool uimode = true;
+
+    if (uimode) {
         visualize(argc, argv);
     } else {
         batch_run(runManager, runParameters);

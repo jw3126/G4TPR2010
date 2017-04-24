@@ -11,7 +11,7 @@
 
 
 
-TEST_CASE( "Scoring", "[Scoring]" ) {
+TEST_CASE( "Scoring", "[Scoring]" ) { // name and [tag] of the test
     Scoring s = Scoring();
     // Get nist material manager
     G4NistManager* nist = G4NistManager::Instance();

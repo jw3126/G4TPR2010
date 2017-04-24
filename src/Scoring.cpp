@@ -82,8 +82,8 @@ void Scoring::AddEventScore(G4LogicalVolume *vol, G4double edep) {
     if (edep > 0) {
         if (IsWatched(vol))  {
             vector<string> &names = GetNames(vol);
-            for (auto i = names.begin(); i != names.end(); ++i) {
-                GetEventScore(*i) += edep;
+            for (auto name = names.begin(); name != names.end(); ++name) {
+                GetEventScore(*name) += edep;
             }
         }
     }
@@ -96,20 +96,15 @@ G4double Scoring::GetRunScore2(std::string name) {
     return GetAccumulable2(name) -> GetValue();
 }
 
-//G4double Scoring::GetRunStd(std::string name) {
-//
-//
-//}
-
 void Scoring::FinishEvent() {
     *fNumberOfEvents += 1;
-    for (auto i = fWatchedScorerNames.begin(); i != fWatchedScorerNames.end(); ++i) {
-        G4double edep = GetEventScore(*i);
-        ResetEventScore(*i);
+    for (auto name = fWatchedScorerNames.begin(); name != fWatchedScorerNames.end(); ++name) {
+        G4double edep = GetEventScore(*name);
+        ResetEventScore(*name);
 
-        auto acc = GetAccumulable(*i);
+        auto acc = GetAccumulable(*name);
         *acc += edep;
-        auto acc2 = GetAccumulable2(*i);
+        auto acc2 = GetAccumulable2(*name);
         *acc2 += edep*edep;
     }
 }

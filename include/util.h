@@ -21,6 +21,4 @@ inline G4bool HasElement(vector<T> v, T x) {
     return ( find(v.begin(), v.end(), x) != v.end());
 }
 
-
-
 #endif //G4TPR2010_UTIL_H

@@ -4,14 +4,12 @@ ActionInitialization::~ActionInitialization() {}
 
 void ActionInitialization::BuildForMaster() const {
     Scoring scoring = Scoring();
-
     RunAction* runAction = new RunAction(fRunContext, scoring);
     SetUserAction(runAction);
 }
 
 void ActionInitialization::Build() const
 {
-//    RunParameters& runParameters = fRunContext.GetRunParameters();
 
     PrimaryGeneratorAction* primaryGeneratorAction = new PrimaryGeneratorAction(fRunContext);
     SetUserAction(primaryGeneratorAction);
